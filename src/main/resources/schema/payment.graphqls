@@ -1,0 +1,17 @@
+extend type Mutation{
+	generateClientToken:String!
+	createTransaction(paymentId:String!,amount:BigDecimal!):String!
+	createPayment(paymentInput:PaymentInput!):Payment!
+}
+
+input PaymentInput{
+	transactionId:String!
+	paymentMethod:String!
+}
+
+type Payment{
+	transactionId:ID
+	paymentMethod:String!
+	paymentStatus:String
+}
+

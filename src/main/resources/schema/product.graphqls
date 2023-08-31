@@ -1,0 +1,51 @@
+
+extend type Query{
+	products(tableCriteria:TableCriteria):ProductConnection
+}
+
+extend type Mutation{
+	saveProduct(productInput:ProductInput!):String
+}
+
+input ProductInput{
+	id:ID
+	name:String
+	description:String
+	price:BigDecimal
+}
+
+
+type Product @connection{
+	id:ID
+	name:String
+	price:BigDecimal
+	description:String
+}
+
+input PageInput{
+	page:Int
+	size:Int
+}
+
+
+input Page{
+	first:Int
+	after:String
+	last:Int
+	before:String
+}
+
+input Search{
+	value:String
+	columns:[String]
+}
+
+input Filter{
+	filters:[String]
+}
+
+input TableCriteria{
+	page:Page
+	search:Search
+	filter:Filter
+}

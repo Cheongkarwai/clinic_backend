@@ -1,0 +1,29 @@
+
+extend type Mutation{
+	registerUser(input:UserInput!):String!
+	token(input:TokenInput!):Token!
+	loginUser(input:LoginInput!):Token!
+	sendForgotPasswordEmail(emailAddress:String!):Boolean!
+	changePassword(username:String!,password:String!):String!
+}
+
+type Token{
+	username:String
+	accessToken:String
+	refreshToken:String
+}
+
+input TokenInput{
+	username:String
+	refreshToken:String
+}
+
+input UserInput{
+	username:String
+	password:String
+}
+
+input LoginInput{
+	username:String
+	password:String
+}

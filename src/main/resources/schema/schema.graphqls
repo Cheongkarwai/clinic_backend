@@ -1,0 +1,16 @@
+
+scalar BigDecimal
+scalar DateTime
+
+
+type User @connection{
+	id:ID
+	password:String
+	isEnabled:Boolean
+	appointments:[Appointment]
+}
+
+type Appointment{
+	id:ID
+	createdAt:DateTime
+}
