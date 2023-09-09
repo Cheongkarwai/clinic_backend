@@ -9,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -19,6 +21,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name="tbl_product")
 public class Product implements Serializable{
@@ -29,9 +33,9 @@ public class Product implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	 @GeneratedValue(generator = "prod-generator")
+	@GeneratedValue(generator = "prod-generator")
     @GenericGenerator(name = "prod-generator", 
-      strategy = "com.cheong.clinic_api.entity.ProductIdGenerator")
+      strategy = "com.cheong.clinic_api.product.domain.ProductIdGenerator")
 	@Column(nullable = false)
 	private String id;
 	
