@@ -69,7 +69,7 @@ public class User {
 	@OneToMany(mappedBy = "receivedBy")
 	private List<Message> userReceiveMessage = new ArrayList<>();
 	
-	@OneToOne(mappedBy = "user")
+	@OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
 	private UserProfile userProfile;
 	
 	@OneToMany(mappedBy = "user")
