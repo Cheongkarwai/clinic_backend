@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import com.cheong.clinic_api.product.dto.ProductInput;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +44,7 @@ import jakarta.persistence.criteria.Root;
 
 @Service
 @Transactional
+@CacheConfig(cacheNames = "product")
 public class ProductService implements IProductService {
 
 	private ProductRepository productRepository;
@@ -71,6 +76,7 @@ public class ProductService implements IProductService {
 		return productRepository.findAll(pageable);
 	}
 
+	@Cacheable(value = "product",key = "{#id}")
 	@Override
 	public Product findById(String id) {
 		return productRepository.findById(id)
@@ -202,6 +208,29 @@ public class ProductService implements IProductService {
 
 		return new DefaultConnection<>(productEdges, pageInfo);
 
+	}
+	
+	@Override
+	public String save(ProductInput productInput) {
+		return productRepository.save(Product.builder().name(productInput.getName())
+				.description(productInput.getDescription())
+				.price(productInput.getPrice()).build()).getId();
+	}
+
+	@CachePut(key = "#id")
+	@Override
+	public Product update(String id,ProductInput productInput) {
+		Product product = productRepository.findById(id).orElseThrow(NoSuchElementException::new);
+		product.setName(productInput.getName());
+		product.setPrice(productInput.getPrice());
+		product.setDescription(productInput.getDescription());
+		return productRepository.save(product);
+	}
+
+	@CacheEvict(key = "#id")
+	@Override
+	public void deleteById(String id) {
+		productRepository.deleteById(id);
 	}
 
 }
