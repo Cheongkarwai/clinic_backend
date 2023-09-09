@@ -1,0 +1,9 @@
+
+scalar BigDecimal
+scalar DateTime
+
+
+type Appointment{
+	id:ID
+	createdAt:DateTime
+}

@@ -1,8 +1,0 @@
-type Query{
-	user(username:String!):User
-	users(first:Int, after:String, before:String):UserConnection
-}
-
-type Mutation{
-	deleteUser(username:String!):String!
-}

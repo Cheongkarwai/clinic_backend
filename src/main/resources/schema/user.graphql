@@ -1,0 +1,18 @@
+
+
+type Query{
+	user(username:String! @NotBlank):User
+	users(first:Int! @Positive, after:String , before:String):UserConnection
+}
+
+type Mutation{
+	deleteUser(username:String!):String!
+}
+
+
+type User @connection{
+	id:ID
+	password:String
+	isEnabled:Boolean
+	appointments:[Appointment]
+}

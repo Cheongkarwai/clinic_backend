@@ -1,0 +1,21 @@
+input Page{
+    first:Int
+    after:String
+    last:Int
+    before:String
+}
+
+input Search{
+    value:String
+    columns:[String]
+}
+
+input Filter{
+    filters:[String]
+}
+
+input TableCriteria{
+    page:Page
+    search:Search
+    filter:Filter
+}

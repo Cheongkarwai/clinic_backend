@@ -1,0 +1,4 @@
+extend type Mutation{
+    downloadInventoryReport:[Byte]
+    uploadFiles(files:[Upload]):[String]
+}

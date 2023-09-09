@@ -1,3 +1,5 @@
+scalar ByteArray
+
 
 extend type Query{
 	products(tableCriteria:TableCriteria):ProductConnection
@@ -5,13 +7,14 @@ extend type Query{
 
 extend type Mutation{
 	saveProduct(productInput:ProductInput!):String
+	updateProduct(id:String!,productInput:ProductInput!):Product
+	deleteProduct(id:String!):String
 }
 
 input ProductInput{
-	id:ID
-	name:String
+	name:String @NotBlank
 	description:String
-	price:BigDecimal
+	price:BigDecimal @PositiveOrZero
 }
 
 
@@ -22,30 +25,10 @@ type Product @connection{
 	description:String
 }
 
+
 input PageInput{
 	page:Int
 	size:Int
 }
 
 
-input Page{
-	first:Int
-	after:String
-	last:Int
-	before:String
-}
-
-input Search{
-	value:String
-	columns:[String]
-}
-
-input Filter{
-	filters:[String]
-}
-
-input TableCriteria{
-	page:Page
-	search:Search
-	filter:Filter
-}
