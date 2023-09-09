@@ -1,5 +1,7 @@
 package com.cheong.clinic_api.product.fetcher;
 
+import com.netflix.graphql.dgs.DgsMutation;
+import com.netflix.graphql.dgs.DgsQuery;
 import org.springframework.cache.annotation.Cacheable;
 
 import com.cheong.clinic_api.common.dto.TableCriteria;
@@ -21,15 +23,25 @@ public class ProductDataFetcher{
 
 	private final IProductService productService;
 
-	@DgsData(parentType="Query",field = "products")
-	//@Cacheable(value="products",key="'product-page-'+#pageInput.page")
+	@DgsQuery(field = "products")
+			//@Cacheable(value="products",key="'product-page-'+#pageInput.page")
 	public Connection<Product> findAll(@InputArgument TableCriteria tableCriteria) {
 		return productService.findAllProduct(tableCriteria);
 	}
 	
-	@DgsData(parentType="Mutation",field = "saveProduct")
+	@DgsMutation(field = "saveProduct")
 	public String save(@InputArgument ProductInput productInput) {
-		System.out.println("Hi");
-		return "Hi";
+		return productService.save(productInput);
+	}
+
+	@DgsMutation(field = "updateProduct")
+	public Product update(@InputArgument String id,@InputArgument ProductInput productInput){
+		return productService.update(id,productInput);
+	}
+
+	@DgsMutation(field = "deleteProduct")
+	public String delete(@InputArgument String id){
+		 productService.deleteById(id);
+		 return null;
 	}
 }
