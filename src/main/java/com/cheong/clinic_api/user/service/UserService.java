@@ -155,7 +155,7 @@ public class UserService implements IUserService, UserDetailsManager {
 
 	@Override
 	public String changePasswordByUsername(String username, String password) {
-		User user = userRepository.findById(username).orElseThrow(() -> new NoSuchElementException("User not found"));
+		User user = userRepository.findById(username).orElseThrow(() -> new UserNotFoundException("User not found"));
 		user.setPassword(passwordEncoder.encode(password));
 		userRepository.save(user);
 
