@@ -13,7 +13,7 @@ import com.cheong.clinic_api.auth.domain.User;
 
 public interface UserRepository extends JpaRepository<User, String>{
 
-	Optional<User> findByUserProfileEmail(String email);
+	Optional<User> findByUserProfile_email(String email);
 
 	@Query("SELECT u FROM User u WHERE u.id > :cursor ORDER BY u.id ASC")
 	List<User> findAllAfter(@Param("cursor") String after,Pageable pageable);
