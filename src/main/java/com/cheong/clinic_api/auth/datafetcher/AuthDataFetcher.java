@@ -1,5 +1,6 @@
-package com.cheong.clinic_api.auth.graphql;
+package com.cheong.clinic_api.auth.datafetcher;
 
+import com.netflix.graphql.dgs.DgsMutation;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,19 +19,17 @@ import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsData;
 import com.netflix.graphql.dgs.InputArgument;
 
-import lombok.RequiredArgsConstructor;
-
 @DgsComponent
-public class AuthGraphQL {
+public class AuthDataFetcher {
 	
-	private IUserService userService;
-	private TokenService tokenService;
-	private IEmailService emailService;
-	private AuthenticationProvider daoAuthenticationProvider;
-	private AuthenticationProvider jwtAuthenticationProvider;
+	private final IUserService userService;
+	private final TokenService tokenService;
+	private final IEmailService emailService;
+	private final AuthenticationProvider daoAuthenticationProvider;
+	private final AuthenticationProvider jwtAuthenticationProvider;
 	
-	public AuthGraphQL(IUserService userService, TokenService tokenService, IEmailService emailService,
-			AuthenticationProvider daoAuthenticationProvider, AuthenticationProvider jwtAuthenticationProvider) {
+	public AuthDataFetcher(IUserService userService, TokenService tokenService, IEmailService emailService,
+						   AuthenticationProvider daoAuthenticationProvider, AuthenticationProvider jwtAuthenticationProvider) {
 		this.userService = userService;
 		this.tokenService = tokenService;
 		this.emailService = emailService;
@@ -39,7 +38,7 @@ public class AuthGraphQL {
 	}
 	
 
-	@DgsData(parentType="Mutation",field="token")
+	@DgsMutation(field = "token")
 	Token generateToken(@InputArgument("input") TokenInput tokenRequest) {
 		
 		Authentication authentication = jwtAuthenticationProvider
@@ -51,11 +50,11 @@ public class AuthGraphQL {
 				.username(tokenRequest.getUsername()).build();
 	}
 	
-	@DgsData(parentType="Mutation",field="loginUser")
-	public Token login(@InputArgument("input") LoginInput loginRequest) {
+	@DgsMutation(field = "loginUser")
+			public Token login(@InputArgument LoginInput input) {
 		
 		Authentication authentication = daoAuthenticationProvider.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+				new UsernamePasswordAuthenticationToken(input.getUsername(), input.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -65,14 +64,14 @@ public class AuthGraphQL {
 				.username(authentication.getName()).build();
 	}
 	
-	@DgsData(parentType="Mutation",field="registerUser")
-	public String register(@InputArgument("input")UserInput userModel) {
-		userService.save(userModel);
+	@DgsMutation(field = "registerUser")
+			public String register(@InputArgument UserInput input) {
+		userService.save(input);
 		return null;
 	}
 	
-	@DgsData(parentType="Mutation",field="sendForgotPasswordEmail")
-	public boolean sendEmail(@InputArgument String emailAddress) throws jakarta.mail.MessagingException {
+	@DgsMutation(field = "sendForgotPasswordEmail")
+			public boolean sendEmail(@InputArgument String emailAddress) throws jakarta.mail.MessagingException {
 		return emailService.send("Forgot Password", emailAddress,"forgot-password");
 	}
 	
