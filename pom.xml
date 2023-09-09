@@ -15,6 +15,10 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
+		<open.csv.version>5.7.1</open.csv.version>
+		<spring-cloud-gcp.version>4.7.2</spring-cloud-gcp.version>
+		<spring-cloud.version>2022.0.4</spring-cloud.version>
+		<dgs-netflix-graphql.version>7.3.6</dgs-netflix-graphql.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -39,6 +43,11 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -77,19 +86,10 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!--dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-graphql</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.graphql</groupId>
-			<artifactId>spring-graphql-test</artifactId>
-			<scope>test</scope>
-		</dependency-->
 		<dependency>
 			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>5.7.1</version>
+			<version>${open.csv.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -104,6 +104,11 @@
 		<dependency>
 			<groupId>com.netflix.graphql.dgs</groupId>
 			<artifactId>graphql-dgs-extended-scalars</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.netflix.graphql.dgs/graphql-dgs-extended-validation -->
+		<dependency>
+			<groupId>com.netflix.graphql.dgs</groupId>
+			<artifactId>graphql-dgs-extended-validation</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.netflix.graphql.dgs/graphql-dgs-pagination -->
 		<dependency>
@@ -153,11 +158,21 @@
 		<dependency>
 			<groupId>org.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
-			<version>3.1.2</version>
+			<version>3.7.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter-storage</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -167,7 +182,21 @@
 				<groupId>com.netflix.graphql.dgs</groupId>
 				<artifactId>graphql-dgs-platform-dependencies</artifactId>
 				<!-- The DGS BOM/platform dependency. This is the only place you set version of DGS -->
-				<version>7.3.6</version>
+				<version>${dgs-netflix-graphql.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.cloud</groupId>
+				<artifactId>spring-cloud-gcp-dependencies</artifactId>
+				<version>${spring-cloud-gcp.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -188,11 +217,11 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.sonarsource.scanner.maven</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.9.1</version>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.sonarsource.scanner.maven</groupId>-->
+<!--				<artifactId>sonar-maven-plugin</artifactId>-->
+<!--				<version>3.9.1</version>-->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 </project>
