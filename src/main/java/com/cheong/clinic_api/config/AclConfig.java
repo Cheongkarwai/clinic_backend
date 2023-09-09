@@ -25,11 +25,15 @@ import com.cheong.clinic_api.auth.CustomAclPermissionEvaluator;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@RequiredArgsConstructor
 public class AclConfig{
 	
 	private final DataSource dataSource;
 	private final CacheManager cacheManager;
+
+	public AclConfig(DataSource dataSource,CacheManager cacheManager){
+		this.dataSource = dataSource;
+		this.cacheManager = cacheManager;
+	}
 	
 	@Bean
 	public AclAuthorizationStrategy aclAuthorizationStrategy() {
