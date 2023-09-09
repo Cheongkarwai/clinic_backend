@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.netflix.graphql.dgs.DgsMutation;
+import com.netflix.graphql.dgs.DgsQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -39,7 +41,7 @@ public class UserDataFetcher {
 	private final IUserService userService;
 	public static final Logger LOGGER = LoggerFactory.getLogger(UserDataFetcher.class.getName());
 
-	@DgsData(parentType = "Query", field = "users")
+	@DgsQuery(field = "users")
 	public Connection<User> findAll(DataFetchingEnvironment dataFetchingEnvironment) {
 		Integer first = dataFetchingEnvironment.getArgument("first");
 		String after = dataFetchingEnvironment.getArgument("after");
@@ -48,13 +50,13 @@ public class UserDataFetcher {
 		return userService.findAll(first, after,before);
 	}
 
-	@DgsData(parentType = "Query", field = "user")
+	@DgsQuery(field = "user")
 	public User findByUsername(@InputArgument String username) {
 		LOGGER.info("Received argument : {}", username);
 		return userService.findByUsername(username);
 	}
 
-	@DgsData(parentType = "Mutation", field = "deleteUser")
+	@DgsMutation(field = "deleteUser")
 	public String deleteByUsername(@InputArgument String username) {
 		userService.deleteByUsername(username);
 		return null;
