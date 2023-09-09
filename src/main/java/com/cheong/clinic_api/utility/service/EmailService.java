@@ -51,7 +51,7 @@ public class EmailService implements IEmailService {
 
 	private void sendForgotPasswordEmail(String to) throws MessagingException {
 
-		User user = userRepository.findByUserProfileEmail(to).orElseThrow(()->new NoSuchElementException("User not found"));
+		User user = userRepository.findByUserProfile_email(to).orElseThrow(()->new NoSuchElementException("User not found"));
 		
 		String changePasswordPage = "http://localhost:4200/change-password";
 		
