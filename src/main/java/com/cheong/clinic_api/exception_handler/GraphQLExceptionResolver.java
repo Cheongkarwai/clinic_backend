@@ -4,6 +4,7 @@ import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
 import com.cheong.clinic_api.user.exception.UserNotFoundException;
@@ -23,9 +24,8 @@ public class GraphQLExceptionResolver implements DataFetcherExceptionHandler {
 	@Override
 	public CompletableFuture<DataFetcherExceptionHandlerResult> handleException(DataFetcherExceptionHandlerParameters parameters) {
 
-		if (parameters.getException() instanceof UserNotFoundException) {
-			UserNotFoundException userNotFoundException = (UserNotFoundException) parameters.getException();
-			
+		if (parameters.getException() instanceof UserNotFoundException userNotFoundException) {
+
 			GraphQLError graphQLError = TypedGraphQLError.newNotFoundBuilder().
 					message(userNotFoundException.getMessage())
 					.path(parameters.getPath()).build();
@@ -36,6 +36,19 @@ public class GraphQLExceptionResolver implements DataFetcherExceptionHandler {
 			
 			return CompletableFuture.completedFuture(result);
 		}
+
+		if(parameters.getException() instanceof BadCredentialsException badCredentialsException){
+
+			GraphQLError graphQLError = TypedGraphQLError.newNotFoundBuilder().
+					message(badCredentialsException.getMessage())
+					.path(parameters.getPath()).build();
+
+			DataFetcherExceptionHandlerResult result = DataFetcherExceptionHandlerResult.newResult()
+					.error(graphQLError)
+					.build();
+
+			return CompletableFuture.completedFuture(result);
+ 		}
 
 //		if (exception instanceof BadCredentialsException) {
 //			BadCredentialsException badCredentialsException = (BadCredentialsException) exception;
