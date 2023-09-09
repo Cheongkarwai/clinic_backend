@@ -1,5 +1,6 @@
 package com.cheong.clinic_api.product.service;
 
+import com.cheong.clinic_api.product.dto.ProductInput;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,6 +15,7 @@ import graphql.relay.Connection;
 public interface IProductService {
 
 	void createProduct(ProductDto productDto);
+
 	
 	Page<Product> findAll(Pageable pageable);
 	
@@ -24,4 +26,11 @@ public interface IProductService {
 	Connection<Product> findAllProduct(PageInput pageInput);
 
 	Connection<Product> findAllProduct(TableCriteria tableCriteria);
+
+
+	String save(ProductInput productInput);
+
+	Product update(String id,ProductInput productInput);
+
+	void deleteById(String id);
 }
